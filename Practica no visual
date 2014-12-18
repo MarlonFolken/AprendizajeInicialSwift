@@ -1,0 +1,179 @@
+// Practicas random
+//Elaboracion 16 y 17 de diciembre del 2014
+
+import UIKit
+
+var num1 = 6
+var num2 = 7
+
+/*Operaciones aritmeticas*/
+//Suma. Se hace uso de etiquetas explicitas para poner nombre a los parametros (external parameter)
+func suma (sumaUno num1:Int, sumaDos num2:Int) -> Int{
+    return num1 + num2
+}
+
+//Resta. Se hace uso de etiquetas repetidas(#) para poner nombre a los parametros (external parameter)
+func resta (#resta1:Int, #resta2:Int) ->Int {
+    return resta1 - resta2
+}
+
+/*Procedimientos o uso de las funciones de aritmetica declaradas arriba*/
+suma(sumaUno: 5, sumaDos: 4)
+resta(resta1: 3, resta2: 2)
+
+/*Verificacion de acceso al comparar si la cadena enviada es el I.D. unico autorizado
+Práctica para el uso de tupla*/
+func usoTupla (ID usuario:String) -> (Bool,String) {
+    var mensaje = (false, "Usted no esta autorizado(a).")
+    if usuario == "Boss" {
+        mensaje = (true, "Bienvenido")
+    }else {
+        mensaje = (false, "Nice try... Acceso negado")
+    }
+    return mensaje
+}
+
+usoTupla(ID: "Soy un invitado")
+
+//Uso de constantes que se regresan como tupla, al usar una funcion.
+func saludo(persona: String) -> (mensaje:String, lenguaje:String) {
+    let lenguaje = "English"
+    let mensaje = "Hello \(persona)"
+    
+    return (mensaje, lenguaje)
+}
+var resultado = saludo("Tom")
+//Despliegue en consola de unicamente el segundo valor de la tupla retornada mediante la funcion saludo()
+println(resultado.lenguaje)
+
+
+
+/*Funcion para determinar si un numero es divisible por otro.
+Toma dos parametros como argumento y revisa si el primero es divisible por el segundo.
+*/
+func isDivisible (#dividendo: Int, #divisor: Int) -> Bool? {
+    if dividendo % divisor == 0 {
+        return true
+    }else{
+        return nil
+    }
+}
+
+if isDivisible(dividendo: 5, divisor: 8) == nil {
+    println("Not Divisible")
+} else {
+    println("Divisible")
+}
+
+
+enum BilleteMX: Int {
+    case Hidalgo = 1_000
+    case Diego = 500
+    case SorJuana = 200
+    case Neza = 100
+    case Morelos = 50
+    case Benito = 20
+}
+
+var caseta = BilleteMX.Morelos.rawValue
+var cuantoMorelos = BilleteMX(rawValue: 20)
+println(caseta)
+println(cuantoMorelos)
+
+enum Dia: Int {
+    case Lunes = 1, Martes, Miercoles, Jueves, Viernes, Sabado, Domingo
+    //La secuencia 1...7 se autocompleta
+    
+    //Initializer. Establece el elemento por default para el tipo Dia
+    init () {
+        self = .Lunes
+    }
+    
+    //metodo. ¿Cuantos dias para que sea fin de semana?
+    func diasParaFinSemana() -> Int {
+        let restante = Dia.Sabado.rawValue - self.rawValue
+        if  restante > 0 {
+            return restante
+        } else {
+            return 0
+        }
+    }
+}
+
+println(Dia.Domingo.diasParaFinSemana())
+//Impresion que muestra el uso de un valor por default para Dia
+println("La semana comienza el lunes, que queda \n a \(Dia().diasParaFinSemana()) dias del fin de semana")
+
+enum Coin: Int {
+    case Penny = 1, Nickel = 5, Dime = 10, Quarter = 25
+    
+    func isGreater(newValue: Coin) -> Bool {
+        return self.rawValue > newValue.rawValue
+    }
+}
+
+println(Coin.Nickel.isGreater(Coin.Dime))
+
+/********Espacio para estructuras********/
+struct AutoZ3 {
+    let modelo: String
+    let origen: String
+}
+
+var pedidoAuto = AutoZ3(modelo: "Z3", origen: "Europeo")
+
+struct AutoAztek {
+    let modelo: String
+    let origen: String
+    var color: String
+    
+    init(modelo: String, origen: String) {
+        //self.modelo es la constante, =modelo es el parametro
+        self.modelo = modelo
+        self.origen = origen
+        self.color  = "amarillo"
+    }
+}
+
+var pedidoCamioneta = AutoAztek(modelo: "2001", origen: "México")
+
+//Para calcular el impuesto(I.V.A.) de una compra
+struct Gasto {
+    var descripcion: String
+    var desembolso: Double = 0.0
+    
+    init (descripcionInicial: String) {
+        self.descripcion = descripcionInicial
+    }
+    
+    // Cálculo de I.V.A.
+    func calculoImpuesto (porcentajeIVA: Double) -> Double {
+        return self.desembolso * (porcentajeIVA/100)
+    }
+}
+
+//Instancia inicializada
+var compra1 = Gasto(descripcionInicial: "compra de botana")
+compra1.desembolso = 100
+
+//Impuesto a pagar bajo elementos otorgados
+var impuestoAPagar = compra1.calculoImpuesto(7.5)
+
+//Para llevar el registro de actividades por hacer
+//Categorias (del tipo Progreso) enumerados para otorgarles un peso de cuanta atencion requieren
+enum Progreso: Int {
+    case Pendiente = 2, Aplazado = 1, Realizado = 0
+}
+
+struct Actividad {
+    var descripcion: String
+    var progreso: Progreso
+    
+    init (descripcion: String) {
+        self.descripcion = descripcion
+        self.progreso = Progreso.Pendiente
+    }
+}
+
+var inicioDia = Actividad(descripcion: "Preparar desayuno")
+inicioDia.progreso = .Aplazado
